@@ -8,7 +8,7 @@ const Navbar = async () => {
 
   return (
     <header className="px-5 py-3 bg-white shadow-sm font-work-sans">
-      <nav className="flex justify-between items-center">
+      <nav className="flex justify-between items-center ">
 
         <Link href="/">
           <Image
@@ -22,7 +22,7 @@ const Navbar = async () => {
         </Link>
 
         {/* Right side links */}
-        <div className="flex items-center gap-5 text-black">
+        <div className="flex items-center gap-8 text-black">
           {session && session.user ? (
             <>
               {/* Create Link */}
