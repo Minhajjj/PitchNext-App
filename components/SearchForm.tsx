@@ -20,8 +20,8 @@ const SearchForm = ({ query }: { query?: string }) => {
       {query && <SearchFormReset />}
 
       <button type="submit" className="search-btn">
-        <IoMdSearch />
-        {/* <Search /> */}
+        {/* <IoMdSearch /> */}
+        <Search />
       </button>
     </Form>
   )
