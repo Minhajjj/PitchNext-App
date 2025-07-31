@@ -247,7 +247,8 @@
   align-items: center;
   background-color: #55dde0;
   border: 5px solid #000000;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
   border-radius: 30px;
   position: relative;
@@ -272,7 +273,8 @@
   padding-bottom: 0.75rem;
   position: absolute;
   top: -2.25rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
