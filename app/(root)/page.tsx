@@ -6,11 +6,13 @@ import { STARTUPS_QUERY } from "@/sanity/lib/queries";
 
 export default async function Home({ searchParams }:
   { searchParams: Promise<{ query?: string }> }) {
-  const params = await searchParams;
-  const query = params.query;
+  const query = (await searchParams).query;
+  const params = { search: query || null };
 
   // const posts: StartupQueryResult[] = await client.fetch(STARTUPS_QUERY);
-  const { data: posts } = await sanityFetch({ query: STARTUPS_QUERY });
+  // const { data: posts } = await sanityFetch({ query: STARTUPS_QUERY, params });
+  const { data: posts }: { data: StartupQueryResult[] } = await sanityFetch({ query: STARTUPS_QUERY, params });
+
 
   return (
     <>

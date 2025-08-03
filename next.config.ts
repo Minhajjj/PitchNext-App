@@ -5,9 +5,20 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "*", 
+        hostname: "*",
       },
     ],
+  },
+
+  experimental: {
+    ppr: "incremental",
+  },
+
+  devIndicators: {
+    // appIsrStatus: true,
+    // buildActivity: true,
+    // buildActivityPosition: "bottom-right",
+    position: "bottom-right",
   },
 };
 

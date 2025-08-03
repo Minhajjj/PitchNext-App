@@ -70,7 +70,7 @@ const StartupCard = ({ post }: { post: StartupQueryResult }) => {
       </Link>
 
       <div className="flex-between gap-3 mt-5">
-        <Link href={`/query=${category?.toLowerCase() || ''}`}>
+        <Link href={`/?query=${category?.toLowerCase() || ''}`}>
           <p className="text-16-medium">
             {category ? category.charAt(0).toUpperCase() + category.slice(1) : 'Uncategorized'}
           </p>
