@@ -2,13 +2,21 @@ import React from 'react';
 import Ping from './Ping';
 import { client } from '@/sanity/lib/client';
 import { STARTUP_VIEWS_QUERY } from '@/sanity/lib/queries';
+import { writeClient } from '@/sanity/lib/write-client';
+import { after } from 'next/server'
 
-const View = async ({ id }: { id: string }) => {
+async function View({ id }: { id: string; }) {
   const { views: totalViews } = await client
     .withConfig({ useCdn: false })
-    .fetch(STARTUP_VIEWS_QUERY, { id });
+    .fetch<{ _id: string; views: number }>(STARTUP_VIEWS_QUERY, { id });
 
-  // TODO : Update the number of views
+
+  after(async () =>
+    await writeClient
+      .patch(id)
+      .set({ views: totalViews + 1 })
+      .commit()
+  )
 
   return (
     <div className="fixed bottom-4 right-4 z-50">
@@ -20,6 +28,8 @@ const View = async ({ id }: { id: string }) => {
       </div>
     </div>
   );
-};
+}
+
+
 
 export default View;
