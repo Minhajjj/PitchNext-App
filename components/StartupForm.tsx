@@ -1,21 +1,84 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useActionState, useState } from 'react'
 import { Textarea } from './ui/textarea';
 import MDEditor from '@uiw/react-md-editor';
 import { Button } from './ui/button';
 import { Send } from 'lucide-react';
+import { formSchema } from '@/lib/validation';
+import z from "zod";
+import { toast } from "sonner"
+import { CheckCircle } from "lucide-react"; // optional icon
+import { AlertCircle } from "lucide-react"; // error icon
+import { useRouter } from 'next/navigation';
+import { createPitch } from '@/lib/actions';
+
 
 
 const StartupForm = () => {
   const [errors, seterrors] = useState<Record<string, string>>({});
   const [pitch, setpitch] = useState("");
-  const isPending = false;
+  const router = useRouter();
+
+  const handleFormSubmit = async (prevState: any, formData: FormData) => {
+
+    try {
+      const fomrValues = {
+        title: formData.get("title") as string,
+        description: formData.get("description") as string,
+        category: formData.get("category") as string,
+        link: formData.get("link") as string,
+        pitch,
+      }
+
+      await formSchema.parseAsync(fomrValues);
+      const result = await createPitch(prevState, formData, pitch)
+      if (result.status === 'SUCCESS') {
+        toast("Success", {
+          description: "Your startup pitch has been created successfully.",
+          icon: <CheckCircle className="text-green-600" />,
+          className: "bg-green-100 text-green-800 border border-green-300",
+        });
+        router.push(`/startup/${result._id}`);
+      }
+      return result;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const fieldErrors = error.flatten().fieldErrors;
+        seterrors(fieldErrors as unknown as Record<string, string>);
+        toast("Error", {
+          description: "Please check your inputs and try again.",
+          icon: <AlertCircle className="text-red-600" />,
+          className: "bg-red-100 text-red-800 border border-red-300 shadow-md",
+        });
+        return { ...prevState, error: "Validation Failed", status: "ERROR" };
+
+      }
+
+      toast("Error", {
+        description: "An unexpected error has occured",
+        icon: <AlertCircle className="text-red-600" />,
+        className: "bg-red-100 text-red-800 border border-red-300 shadow-md",
+      });
+
+      return {
+        ...prevState,
+        error: "An unexpected error has occured",
+        status: "ERROR",
+      }
+    }
+  };
+
+  const [state, formAction, isPending] = useActionState(handleFormSubmit, {
+    error: "",
+    status: "INITIAL",
+  });
+
 
 
   return (
     <div className='section-container'>
-      <form action={() => { }} className='startup-form'>
+      <form action={formAction} className='startup-form'>
         <div>
           <label htmlFor="title" className='startup-form_label'>Title</label>
           <input
